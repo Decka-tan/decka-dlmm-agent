@@ -12,13 +12,13 @@ Pools are pre-filtered for safety:
 - No high single ownership on base token
 - Base token market cap >= $150k
 - Base token holders >= 100
-- 24h volume >= $1k
+- Volume >= $1k (in timeframe)
 - Active TVL >= $10k
-- Fee/Active TVL ratio >= 0.01
+- Fee/Active TVL ratio >= 0.01 (in timeframe)
 - Both tokens organic score >= 60
 
 Returns condensed pool data: address, name, tokens, bin_step, fee_pct,
-active_tvl, fees_24h, volume_24h, fee_tvl_ratio, volatility, organic_score,
+active_tvl, fee_window, volume_window, fee_tvl_ratio, volatility, organic_score,
 holders, mcap, active_positions, price_change_pct, warning count.
 
 Use this as the primary tool for finding new LP opportunities.`,

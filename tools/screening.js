@@ -130,8 +130,8 @@ function condensePool(p) {
 
     // Core metrics (the numbers that matter)
     active_tvl: round(p.active_tvl),
-    fee_24h: round(p.fee),
-    volume_24h: round(p.volume),
+    fee_window: round(p.fee),
+    volume_window: round(p.volume),
     fee_tvl_ratio: fix(p.fee_tvl_ratio, 2),
     fee_active_tvl_ratio: fix(p.fee_active_tvl_ratio, 2),
     volatility: fix(p.volatility, 2),
