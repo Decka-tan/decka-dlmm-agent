@@ -362,19 +362,13 @@ WARNING: This executes a real on-chain transaction.`,
       description: `Update any of your operating parameters at runtime.
 Changes persist to user-config.json and take effect immediately — no restart needed.
 
-You can change anything: screening thresholds, management rules, deploy amounts, cron intervals, strategy params, LLM settings.
-
-Examples:
-- { takeProfitFeePct: 8 }        — raise take profit target for hot markets
-- { maxVolatility: 6 }           — accept higher volatility pools
-- { managementIntervalMin: 5 }   — check positions more frequently
-- { deployAmountSol: 0.5 }       — deploy more per position
-- { timeframe: "1h" }            — switch screening timeframe
-- { maxTvl: 50000 }              — tighter TVL cap
-- { binsBelow: 50 }              — narrower bin range
-- { maxPositions: 5 }            — allow more concurrent positions
-- { managementModel: "openrouter/healer-alpha" }  — switch management cycle model
-- { screeningModel: "openrouter/healer-alpha" }   — switch screening cycle model
+VALID KEYS (use EXACTLY these key names, nothing else):
+Screening: minFeeActiveTvlRatio, minTvl, maxTvl, minVolume, minOrganic, minHolders, minMcap, maxMcap, minBinStep, maxBinStep, timeframe, category, minTokenFeesSol
+Management: minClaimAmount, outOfRangeBinsToClose, outOfRangeWaitMinutes, minVolumeToRebalance, emergencyPriceDropPct, takeProfitFeePct, minSolToOpen, deployAmountSol, gasReserve, positionSizePct
+Risk: maxPositions, maxDeployAmount
+Schedule: managementIntervalMin, screeningIntervalMin
+Models: managementModel, screeningModel, generalModel
+Strategy: binsBelow
 
 Reason is optional but helpful — logged as a lesson when provided.`,
       parameters: {
