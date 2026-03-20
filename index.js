@@ -130,7 +130,7 @@ export function startCronJobs() {
           `POSITION: ${p.pair} (${p.position})`,
           `  pool: ${p.pool}`,
           `  age: ${p.age_minutes ?? "?"}m | in_range: ${p.in_range} | oor_minutes: ${p.minutes_out_of_range ?? 0}`,
-          pnl ? `  pnl_pct: ${pnl.pnl_pct}% | pnl_usd: $${pnl.pnl_usd} | fees: $${pnl.unclaimed_fee_usd} | value: $${pnl.current_value_usd}` : `  pnl: fetch failed`,
+          pnl ? `  pnl_pct: ${pnl.pnl_pct}% | pnl_usd: $${pnl.pnl_usd} | unclaimed_fees: $${pnl.unclaimed_fee_usd} | claimed_fees: $${Math.max(0, (pnl.all_time_fees_usd || 0) - (pnl.unclaimed_fee_usd || 0)).toFixed(2)} | value: $${pnl.current_value_usd}` : `  pnl: fetch failed`,
           p.instruction ? `  instruction: "${p.instruction}"` : null,
           p.recall ? `  memory: ${p.recall}` : null,
         ].filter(Boolean);
@@ -160,7 +160,7 @@ Only call tools if a position needs to be CLOSED or fees need to be CLAIMED.
 If all positions STAY and no fees to claim, just write the report with no tool calls.
 
 REPORT FORMAT (one per position):
-**[PAIR]** | Age: [X]m | Fees: $[X] | PnL: [X]%
+**[PAIR]** | Age: [X]m | Unclaimed: $[X] | Claimed: $[X] | PnL: [X]%
 **Rule:** [number or "none"] | **Decision:** STAY/CLOSE | **Reason:** [1 sentence]
       `, config.llm.maxSteps, [], "MANAGER", config.llm.managementModel, 4096);
       mgmtReport = content;
