@@ -242,6 +242,13 @@ export async function runManagementCycle({ silent = false } = {}) {
         return false;
       })();
 
+      // Rule 0: emergency stop loss — immediate close for extreme losses (bypasses normal SL)
+      const emergencyStopLoss = config.management.emergencyStopLossPct ?? (config.management.stopLossPct * 1.5);
+      if (!pnlSuspect && p.pnl_pct != null && p.pnl_pct <= emergencyStopLoss) {
+        actionMap.set(p.position, { action: "CLOSE", rule: 0, reason: `EMERGENCY stop loss: PnL ${p.pnl_pct.toFixed(1)}%` });
+        log("cron_alert", `EMERGENCY STOP LOSS triggered for ${p.pair}: PnL ${p.pnl_pct.toFixed(1)}% <= ${emergencyStopLoss.toFixed(1)}%`);
+        continue;
+      }
       // Rule 1: stop loss
       if (!pnlSuspect && p.pnl_pct != null && p.pnl_pct <= config.management.stopLossPct) {
         actionMap.set(p.position, { action: "CLOSE", rule: 1, reason: "stop loss" });

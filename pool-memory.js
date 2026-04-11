@@ -155,6 +155,17 @@ export function recordPoolDeploy(poolAddress, deployData) {
     log("pool-memory", `Cooldown set for ${entry.name} until ${cooldownUntil} (low yield close)`);
   }
 
+  // Set cooldown for stop loss closes — significant loss, blacklist pool for extended period
+  if (deploy.close_reason === "stop loss" && (deploy.pnl_pct ?? 0) < -10) {
+    const cooldownHours = 72; // 3 days cooldown for stop loss closes
+    const cooldownUntil = setPoolCooldown(entry, cooldownHours, `stop loss closed at ${deploy.pnl_pct.toFixed(1)}%`);
+    const mintCooldownUntil = setBaseMintCooldown(db, entry.base_mint, cooldownHours, `stop loss closed at ${deploy.pnl_pct.toFixed(1)}%`);
+    log("pool-memory", `STOP LOSS COOLDOWN: ${entry.name} blacklisted until ${cooldownUntil} (closed at ${deploy.pnl_pct.toFixed(1)}%)`);
+    if (entry.base_mint && mintCooldownUntil) {
+      log("pool-memory", `Base mint ${entry.base_mint.slice(0, 8)} blacklisted until ${mintCooldownUntil}`);
+    }
+  }
+
   const oorTriggerCount = config.management.oorCooldownTriggerCount ?? 3;
   const oorCooldownHours = config.management.oorCooldownHours ?? 12;
   const recentDeploys = entry.deploys.slice(-oorTriggerCount);
